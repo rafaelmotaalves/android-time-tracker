@@ -17,12 +17,8 @@ class TaskViewHolder(private val viewModel: TaskViewModel, private val lifecycle
             }
         )
 
-        binding.start.setOnClickListener {
+        binding.root.setOnClickListener {
             viewModel.startTimer(task.id)
-        }
-
-        binding.stop.setOnClickListener {
-            viewModel.stopTimer(task.id)
         }
     }
 }

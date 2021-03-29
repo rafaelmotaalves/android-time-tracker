@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.ufpe.cin.timetracker.databinding.ActivityMainBinding
 
@@ -22,10 +23,12 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = taskAdapter
         }
+        binding.rvTasks.addItemDecoration(DividerItemDecoration(binding.rvTasks.context, DividerItemDecoration.VERTICAL))
 
-        viewModel.tasks.observe(this, Observer {
+        viewModel.tasks.observe(this, {
             taskAdapter.submitList(it)
         })
+
     }
 
     override fun onResume() {

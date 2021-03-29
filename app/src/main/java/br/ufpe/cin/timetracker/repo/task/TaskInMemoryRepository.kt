@@ -11,7 +11,13 @@ class TaskInMemoryRepository : TaskRepository {
 
     override val tasks = arrayListOf(
         Task(1, "Test 1", "Description 1"),
-        Task(2, "Test 2", "Description 2")
+        Task(2, "Test 2", "Description 2"),
+            Task(3, "Test 3", "Description 2"),
+            Task(4, "Test 4", "Description 2"),
+            Task(5, "Test 5", "Description 2"),
+            Task(6, "Test 6", "Description 2"),
+            Task(7, "Test 7", "Description 2"),
+            Task(8, "Test 8", "Description 2")
     )
 
     override val timeIntervals = arrayListOf(
