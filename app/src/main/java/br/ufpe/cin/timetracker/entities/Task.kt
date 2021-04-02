@@ -11,7 +11,7 @@ class Task (
         val name: String,
         val intervals: List<TimeInterval>,
         val done: Boolean,
-        private val estimate: Long
+        val estimate: Long
 ) {
     val status: TaskStatus
         get() = when {

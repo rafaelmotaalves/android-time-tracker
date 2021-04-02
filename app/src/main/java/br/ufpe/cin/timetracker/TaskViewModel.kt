@@ -49,7 +49,7 @@ class TaskViewModel(application: Application) :
             viewModelScope.launch {
                 val startInstant = Instant.now()
 
-                repo.insertTimeInterval(task, TimeInterval(start = startInstant))
+                repo.insertTimeInterval(TimeInterval(start = startInstant, taskId = task.id))
             }
         }
     }
@@ -61,7 +61,7 @@ class TaskViewModel(application: Application) :
             val lastInterval = task.intervals.last()
 
             viewModelScope.launch {
-                repo.updateTimeInterval(task, TimeInterval(lastInterval.id, lastInterval.start, endInstant))
+                repo.updateTimeInterval(TimeInterval(lastInterval.id, lastInterval.start, endInstant, task.id))
             }
         }
     }
