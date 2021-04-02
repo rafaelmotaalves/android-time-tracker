@@ -1,5 +1,6 @@
 package br.ufpe.cin.timetracker
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
@@ -8,11 +9,11 @@ import androidx.recyclerview.widget.ListAdapter
 import br.ufpe.cin.timetracker.databinding.TaskBinding
 import br.ufpe.cin.timetracker.entities.Task
 
-class TaskAdapter(private val viewModel: TaskViewModel, private val lifecycleOwner: LifecycleOwner, private val inflater: LayoutInflater) : ListAdapter<Task, TaskViewHolder>(TaskDiffer) {
+class TaskAdapter(private val viewModel: TaskViewModel, private val context: Context, private val inflater: LayoutInflater) : ListAdapter<Task, TaskViewHolder>(TaskDiffer) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val binding = TaskBinding.inflate(inflater)
 
-        return TaskViewHolder(viewModel, lifecycleOwner, binding)
+        return TaskViewHolder(viewModel, context, binding)
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
@@ -28,7 +29,6 @@ class TaskAdapter(private val viewModel: TaskViewModel, private val lifecycleOwn
             return oldItem.name == newItem.name &&
                     oldItem.done == newItem.done &&
                     oldItem.intervals == newItem.intervals
-
         }
 
     }

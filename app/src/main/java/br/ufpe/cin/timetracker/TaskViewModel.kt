@@ -44,7 +44,7 @@ class TaskViewModel(application: Application) :
         }
     }
 
-    fun startTimer(task: Task) {
+    private fun startTimer(task: Task) {
         if (!task.active) {
             viewModelScope.launch {
                 val startInstant = Instant.now()
@@ -54,7 +54,7 @@ class TaskViewModel(application: Application) :
         }
     }
 
-    fun stopTimer(task: Task) {
+    private fun stopTimer(task: Task) {
         val endInstant = Instant.now()
 
         if (task.active) {

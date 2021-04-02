@@ -1,27 +1,39 @@
 package br.ufpe.cin.timetracker
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import br.ufpe.cin.timetracker.databinding.TaskBinding
 import br.ufpe.cin.timetracker.entities.Task
+import br.ufpe.cin.timetracker.entities.TaskStatus
 
-class TaskViewHolder(private val viewModel: TaskViewModel, private val lifecycleOwner: LifecycleOwner, private val binding: TaskBinding) : RecyclerView.ViewHolder(binding.root) {
+class TaskViewHolder(private val viewModel: TaskViewModel, private val context: Context, private val binding: TaskBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bindTo(task: Task) {
 
         binding.name.text = task.name
 
-        task.elapsedTime.observe(lifecycleOwner,
+        task.elapsedTime.observe(context as LifecycleOwner,
             Observer {
                 binding.timer.text = formatElapsedTimeString(it)
+
+                val status = getStatusString(task.status)
+                val late = getIsLateString(task.late)
+                binding.status.text = "$status $late"
             }
         )
 
         binding.root.setOnClickListener {
             viewModel.toggleTimer(task)
         }
+    }
 
+    private fun getIsLateString(late: Boolean) = if (late) context.getString(R.string.status_late) else ""
+
+    private fun getStatusString(status: TaskStatus) = when(status) {
+        TaskStatus.TODO -> context.getString(R.string.status_todo)
+        TaskStatus.IN_PROGRESS -> context.getString(R.string.status_in_progress)
+        TaskStatus.DONE -> context.getString(R.string.status_done)
     }
 
     private fun formatElapsedTimeString(elapsedTime: Long): String {

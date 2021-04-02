@@ -16,7 +16,7 @@ class TaskRepository (private val dao: TaskDAO)  {
                 interval -> TimeInterval(interval.id, interval.start, interval.end)
             }.collect(Collectors.toList())
 
-            Task(task.task.id, task.task.name, intervals, task.task.done)
+            Task(task.task.id, task.task.name, intervals, task.task.done, task.task.estimateInSeconds)
         }.collect(Collectors.toList())
     }
 
