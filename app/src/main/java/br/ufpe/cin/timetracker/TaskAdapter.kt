@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import br.ufpe.cin.timetracker.databinding.TaskBinding
-import br.ufpe.cin.timetracker.model.Task
+import br.ufpe.cin.timetracker.entities.Task
 
 class TaskAdapter(private val viewModel: TaskViewModel, private val lifecycleOwner: LifecycleOwner, private val inflater: LayoutInflater) : ListAdapter<Task, TaskViewHolder>(TaskDiffer) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -25,7 +25,10 @@ class TaskAdapter(private val viewModel: TaskViewModel, private val lifecycleOwn
         }
 
         override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
-            return oldItem.name == newItem.name && oldItem.description == newItem.description
+            return oldItem.name == newItem.name &&
+                    oldItem.done == newItem.done &&
+                    oldItem.intervals == newItem.intervals
+
         }
 
     }
