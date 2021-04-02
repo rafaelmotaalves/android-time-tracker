@@ -11,5 +11,4 @@ data class TaskModel(
     var description: String,
     var estimateInSeconds: Long,
     val done: Boolean = false
-) {
-}
+)

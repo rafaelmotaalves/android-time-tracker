@@ -9,14 +9,11 @@ class TimeInterval (
         var end: Instant? = null
         ) {
 
-        fun getElapsedTime(): Long {
-                return if (end != null) {
+        fun getElapsedTime(): Long =
+                if (end != null)
                         getTimeInSecondsBetweenInstants(start, end!!)
-                } else {
-                        getTimeInSecondsBetweenInstants(start, Instant.now())
-                }
-        }
+                        else getTimeInSecondsBetweenInstants(start, Instant.now())
 
-        private fun getTimeInSecondsBetweenInstants(start: Instant, end: Instant) : Long = Duration.between(start, end).seconds
-
+        private fun getTimeInSecondsBetweenInstants(start: Instant, end: Instant) : Long =
+                Duration.between(start, end).seconds
 }

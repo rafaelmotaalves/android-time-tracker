@@ -9,7 +9,6 @@ import java.util.stream.Collectors
 
 class TaskRepository (private val dao: TaskDAO)  {
 
-
     val tasks = Transformations.map(dao.getTasksWithIntervals()) { tasks ->
         tasks.stream().map { task ->
             val intervals = task.intervals.stream().map {

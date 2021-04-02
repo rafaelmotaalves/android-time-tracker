@@ -26,16 +26,14 @@ class Task (
     val late: Boolean
         get() = (elapsedTime.value ?: 0) > estimate
 
-    val elapsedTime: MutableLiveData<Long> = MutableLiveData(0)
-
-    init {
-        updateElapsedTime()
-    }
+    val elapsedTime: MutableLiveData<Long> = MutableLiveData(calculateElapsedTime())
 
     fun updateElapsedTime() {
-        elapsedTime.postValue(intervals.stream().mapToLong {
-            it.getElapsedTime()
-        }.sum())
+        elapsedTime.postValue(calculateElapsedTime())
     }
 
+    private fun calculateElapsedTime(): Long =
+        intervals.stream().mapToLong {
+            it.getElapsedTime()
+        }.sum()
 }
