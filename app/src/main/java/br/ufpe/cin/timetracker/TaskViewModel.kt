@@ -44,8 +44,18 @@ class TaskViewModel(application: Application) :
         }
     }
 
+    fun concludeTask(task: Task) {
+        if (!task.done) {
+            stopTimer(task)
+            task.done = true
+            viewModelScope.launch {
+                repo.updateTask(task)
+            }
+        }
+    }
+
     private fun startTimer(task: Task) {
-        if (!task.active) {
+        if (!task.active && !task.done) {
             viewModelScope.launch {
                 val startInstant = Instant.now()
 
@@ -57,7 +67,7 @@ class TaskViewModel(application: Application) :
     private fun stopTimer(task: Task) {
         val endInstant = Instant.now()
 
-        if (task.active) {
+        if (task.active && !task.done) {
             val lastInterval = task.intervals.last()
 
             viewModelScope.launch {

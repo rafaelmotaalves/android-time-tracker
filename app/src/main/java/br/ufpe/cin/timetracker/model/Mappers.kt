@@ -14,6 +14,7 @@ fun TaskWithTimeIntervalsModel.toTask() = Task(
         estimate = task.estimateInSeconds
 )
 
+
 fun TimeIntervalModel.toTimeInterval() = TimeInterval(
         id = id,
         start = start,
@@ -26,4 +27,13 @@ fun TimeInterval.toTimeIntervalModel() = TimeIntervalModel(
         start = start,
         end = end,
         taskId = taskId
+)
+
+
+fun Task.toTaskModel() = TaskModel(
+        id = id,
+        description = "",
+        name = name,
+        done = done,
+        estimateInSeconds = estimate
 )

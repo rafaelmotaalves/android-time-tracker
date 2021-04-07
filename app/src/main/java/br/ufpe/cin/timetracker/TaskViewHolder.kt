@@ -1,6 +1,8 @@
 package br.ufpe.cin.timetracker
 
 import android.content.Context
+import android.view.MotionEvent
+import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
@@ -23,8 +25,15 @@ class TaskViewHolder(private val viewModel: TaskViewModel, private val context: 
             }
         )
 
+        binding.root.isEnabled = !task.done
+
         binding.root.setOnClickListener {
             viewModel.toggleTimer(task)
+        }
+
+        binding.root.setOnLongClickListener {
+            viewModel.concludeTask(task)
+            true
         }
     }
 

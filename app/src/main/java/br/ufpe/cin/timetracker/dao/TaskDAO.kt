@@ -10,7 +10,7 @@ import br.ufpe.cin.timetracker.model.TimeIntervalModel
 interface TaskDAO {
 
     @Transaction
-    @Query("select * from tasks order by name ASC")
+    @Query("select * from tasks order by done ASC, name ASC")
     fun getTasksWithIntervals(): LiveData<List<TaskWithTimeIntervalsModel>>
 
     @Update
@@ -18,4 +18,7 @@ interface TaskDAO {
 
     @Insert
     suspend fun insertTimeInterval(timeIntervalModel: TimeIntervalModel)
+
+    @Update
+    suspend fun updateTask(task: TaskModel)
 }

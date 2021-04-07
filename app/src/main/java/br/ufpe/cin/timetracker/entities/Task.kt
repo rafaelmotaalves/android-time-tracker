@@ -10,9 +10,9 @@ class Task (
         val id: Int = 0,
         val name: String,
         val intervals: List<TimeInterval>,
-        val done: Boolean,
+        var done: Boolean,
         val estimate: Long
-) {
+) : Comparable<Task> {
     val status: TaskStatus
         get() = when {
             done -> TaskStatus.DONE
@@ -36,4 +36,16 @@ class Task (
         intervals.stream().mapToLong {
             it.getElapsedTime()
         }.sum()
+
+    override fun compareTo(other: Task): Int {
+        return if (other.status == status) {
+            name.compareTo(other.name)
+        } else {
+            when(status) {
+                TaskStatus.TODO -> 0
+                TaskStatus.IN_PROGRESS -> -1
+                TaskStatus.DONE -> 1
+            }
+        }
+    }
 }
