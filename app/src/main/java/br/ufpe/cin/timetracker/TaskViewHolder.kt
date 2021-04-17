@@ -71,6 +71,7 @@ class TaskViewHolder(private val viewModel: TaskViewModel, private val context: 
         TaskStatus.TODO -> context.getString(R.string.status_todo)
         TaskStatus.IN_PROGRESS -> context.getString(R.string.status_in_progress)
         TaskStatus.DONE -> context.getString(R.string.status_done)
+        TaskStatus.PAUSED -> context.getString(R.string.status_paused)
     }
 
     private fun formatElapsedTimeString(elapsedTime: Long): String {

@@ -3,7 +3,7 @@ package br.ufpe.cin.timetracker.entities
 import androidx.lifecycle.MutableLiveData
 
 enum class TaskStatus {
-    TODO, IN_PROGRESS, DONE
+    TODO, IN_PROGRESS, DONE, PAUSED
 }
 
 class Task (
@@ -16,7 +16,8 @@ class Task (
     val status: TaskStatus
         get() = when {
             done -> TaskStatus.DONE
-            intervals.isNotEmpty() -> TaskStatus.IN_PROGRESS
+            active -> TaskStatus.IN_PROGRESS
+            intervals.isNotEmpty() -> TaskStatus.PAUSED
             else -> TaskStatus.TODO
         }
 
@@ -44,6 +45,7 @@ class Task (
             when(status) {
                 TaskStatus.TODO -> 0
                 TaskStatus.IN_PROGRESS -> -1
+                TaskStatus.PAUSED -> -1
                 TaskStatus.DONE -> 1
             }
         }
