@@ -54,6 +54,12 @@ class TaskViewModel(application: Application) :
         }
     }
 
+    fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            repo.deleteTask(task)
+        }
+    }
+
     private fun startTimer(task: Task) {
         if (!task.active && !task.done) {
             viewModelScope.launch {

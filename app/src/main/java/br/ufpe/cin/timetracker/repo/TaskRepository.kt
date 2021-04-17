@@ -16,16 +16,15 @@ class TaskRepository (private val dao: TaskDAO)  {
         tasks.stream().map { it.toTask() }.sorted().collect(Collectors.toList())
     }
 
-    suspend fun updateTimeInterval(timeInterval: TimeInterval) {
+    suspend fun updateTimeInterval(timeInterval: TimeInterval) =
         dao.updateTimeInterval(timeInterval.toTimeIntervalModel())
-    }
 
-    suspend fun insertTimeInterval(timeInterval: TimeInterval) {
+    suspend fun insertTimeInterval(timeInterval: TimeInterval) =
         dao.insertTimeInterval(timeInterval.toTimeIntervalModel())
-    }
 
-    suspend fun updateTask(task: Task) {
+    suspend fun updateTask(task: Task) =
         dao.updateTask(task.toTaskModel())
-    }
 
+    suspend fun deleteTask(task: Task) =
+        dao.deleteTask(task.toTaskModel())
 }
