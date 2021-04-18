@@ -10,11 +10,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTasks"
-        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent"
-        />
+        app:layout_constraintTop_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

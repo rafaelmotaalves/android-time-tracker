@@ -10,6 +10,7 @@ class Task (
         val id: Int = 0,
         val name: String,
         val intervals: List<TimeInterval>,
+        val description: String,
         var done: Boolean,
         val estimate: Long
 ) : Comparable<Task> {

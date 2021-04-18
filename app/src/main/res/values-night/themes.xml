@@ -7,12 +7,27 @@
         <item name="colorOnPrimary">#121212</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/purple_200</item>
         <item name="colorOnSecondary">@color/white</item>
 
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="android:textColor" tools:targetApi="1">?attr/colorSecondary</item>
         <item name="android:listDivider" tools:targetApi="1">@drawable/divider</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
+    <style name="Theme.TimeTracker.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimaryDark">#333333</item>
+        <item name="colorAccent">@color/purple_200</item>
+        <item name="colorPrimary">#333333</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="actionMenuTextColor">@color/purple_200</item>
+    </style>
+
+    <style name="Theme.TimeTracker.Slide">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
 </resources>

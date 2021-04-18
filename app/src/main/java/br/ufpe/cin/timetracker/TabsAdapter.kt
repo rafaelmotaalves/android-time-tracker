@@ -8,6 +8,6 @@ class TabsAdapter(fragmentActivity: FragmentActivity, private val fragments: Lis
 
     override fun getItemCount(): Int = fragments.size
 
-    override fun createFragment(position: Int): Fragment = fragments.get(position)
+    override fun createFragment(position: Int): Fragment = fragments[position]
 
 }
