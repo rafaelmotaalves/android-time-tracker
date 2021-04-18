@@ -1,12 +1,14 @@
 package br.ufpe.cin.timetracker
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import br.ufpe.cin.timetracker.databinding.ActivityMainBinding
+import com.google.android.material.tabs.TabLayoutMediator
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -17,27 +19,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val taskAdapter = TaskAdapter(viewModel,this, layoutInflater)
+        val tabs = listOf<Fragment>(
+            TasksFragment.newInstance(viewModel, TasksMode.CURRENT),
+            TasksFragment.newInstance(viewModel, TasksMode.HISTORY)
+        )
+        supportActionBar?.elevation = .0F;
 
-        binding.rvTasks.apply {
-            layoutManager = LinearLayoutManager(applicationContext)
-            adapter = taskAdapter
-        }
-        binding.rvTasks.addItemDecoration(DividerItemDecoration(binding.rvTasks.context, DividerItemDecoration.VERTICAL))
+        val adapter = TabsAdapter(this, tabs)
+        binding.viewpager.adapter = adapter
 
-        viewModel.tasks.observe(this, {
-            taskAdapter.submitList(it)
-        })
-
+        val tabNames = listOf("Current", "History")
+        TabLayoutMediator(binding.tablayout, binding.viewpager) { tab ,position ->
+            tab.text = tabNames[position]
+        }.attach()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.startBackgroundTimerUpdater()
-    }
-
-    override fun onPause() {
-        viewModel.stopBackgroundTimerUpdater()
-        super.onPause()
-    }
 }

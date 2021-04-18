@@ -12,8 +12,12 @@ import java.util.stream.Collectors
 
 class TaskRepository (private val dao: TaskDAO)  {
 
-    val tasks = Transformations.map(dao.getTasksWithIntervals()) { tasks ->
-        tasks.stream().map { it.toTask() }.sorted().collect(Collectors.toList())
+    val activeTasks = Transformations.map(dao.getTasksWithIntervals()) { tasks ->
+        tasks.stream().map { it.toTask() }.filter{ !it.done }.sorted().collect(Collectors.toList())
+    }
+
+    val historyTasks = Transformations.map(dao.getTasksWithIntervals()) { tasks ->
+        tasks.stream().map { it.toTask() }.filter{ it.done }.sorted().collect(Collectors.toList())
     }
 
     suspend fun updateTimeInterval(timeInterval: TimeInterval) =

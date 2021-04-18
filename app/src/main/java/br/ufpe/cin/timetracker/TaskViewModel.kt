@@ -22,7 +22,8 @@ class TaskViewModel(application: Application) :
     private val repo: TaskRepository = TaskRepository(TaskDB.getInstance(application.applicationContext).taskDAO())
     private var timerTask: TimerTask? = null
 
-    val tasks = repo.tasks
+    val tasks = repo.activeTasks
+    val historyTasks = repo.historyTasks
 
     fun startBackgroundTimerUpdater() {
         timerTask = Timer().scheduleAtFixedRate(0, POOLING_TIMEOUT) {
