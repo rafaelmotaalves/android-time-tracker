@@ -4,10 +4,7 @@ import androidx.lifecycle.Transformations
 import br.ufpe.cin.timetracker.dao.TaskDAO
 import br.ufpe.cin.timetracker.entities.Task
 import br.ufpe.cin.timetracker.entities.TimeInterval
-import br.ufpe.cin.timetracker.model.TimeIntervalModel
-import br.ufpe.cin.timetracker.model.toTask
-import br.ufpe.cin.timetracker.model.toTaskModel
-import br.ufpe.cin.timetracker.model.toTimeIntervalModel
+import br.ufpe.cin.timetracker.model.*
 import java.util.stream.Collectors
 
 class TaskRepository (private val dao: TaskDAO)  {
@@ -34,4 +31,7 @@ class TaskRepository (private val dao: TaskDAO)  {
 
     suspend fun deleteTask(task: Task) =
         dao.deleteTask(task.toTaskModel())
+
+    suspend fun insertTask(task: TaskModel) =
+            dao.insertTask(task)
 }

@@ -12,7 +12,8 @@ class Task (
     val intervals: List<TimeInterval>,
     var done: Boolean,
     var notified: Boolean,
-    val estimate: Long
+    val estimate: Long,
+    val description: String
 ) : Comparable<Task> {
     val status: TaskStatus
         get() = when {

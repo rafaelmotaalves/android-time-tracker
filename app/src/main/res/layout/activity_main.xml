@@ -1,4 +1,4 @@
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,20 +7,48 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tablayout"
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/tablayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="?attr/colorOnPrimary"-->
+<!--        textAllCaps="false"-->
+<!--        app:tabTextColor="@color/white"-->
+<!--        android:textAllCaps="false"-->
+<!--        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"-->
+<!--        />-->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorOnPrimary"
+            />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorOnPrimary"
+                app:tabTextColor="@color/white"
+                android:textAllCaps="false"
+                />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/colorOnPrimary"
-        textAllCaps="false"
-        app:tabTextColor="@color/white"
-        android:textAllCaps="false"
-        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-        />
+        android:layout_gravity="bottom|end"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:layout_margin="32dp"
+        android:contentDescription="@string/fab_content_desc"
+        app:srcCompat="@drawable/ic_baseline_add_24"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

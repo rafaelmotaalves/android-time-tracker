@@ -27,20 +27,23 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setSupportActionBar(binding.toolbar)
         val tabs = listOf<Fragment>(
             TasksFragment.newInstance(viewModel, TasksMode.CURRENT),
             TasksFragment.newInstance(viewModel, TasksMode.HISTORY)
         )
-        supportActionBar?.elevation = .0F;
 
         val adapter = TabsAdapter(this, tabs)
         binding.viewpager.adapter = adapter
 
-        val tabNames = listOf("Current", "History")
-        TabLayoutMediator(binding.tablayout, binding.viewpager) { tab ,position ->
+        val tabNames = listOf("Tasks", "History")
+        TabLayoutMediator(binding.tabLayout, binding.viewpager) { tab, position ->
             tab.text = tabNames[position]
         }.attach()
+
+        binding.floatingActionButton.setOnClickListener {
+            CreateTaskDialog.display(supportFragmentManager)
+        }
     }
 
     private fun scheduleNotificationService() {
@@ -49,7 +52,12 @@ class MainActivity : AppCompatActivity() {
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val frequency: Long = 60 * 1000
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis(), frequency, pendingIntent)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis(),
+            frequency,
+            pendingIntent
+        )
     }
 
     private fun createNotificationChannel() {
@@ -59,16 +67,17 @@ class MainActivity : AppCompatActivity() {
             val name = "Notification channel"
             val descriptionText = "Notification channel description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(NotificationService.CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
+            val channel =
+                NotificationChannel(NotificationService.CHANNEL_ID, name, importance).apply {
+                    description = descriptionText
+                }
 
             // Register the channel with the system
             val notificationManager: NotificationManager =
                 getSystemService(
-                    Context.NOTIFICATION_SERVICE) as NotificationManager
+                    Context.NOTIFICATION_SERVICE
+                ) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
-
 }
