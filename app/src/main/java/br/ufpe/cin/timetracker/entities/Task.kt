@@ -7,11 +7,12 @@ enum class TaskStatus {
 }
 
 class Task (
-        val id: Int = 0,
-        val name: String,
-        val intervals: List<TimeInterval>,
-        var done: Boolean,
-        val estimate: Long
+    val id: Int = 0,
+    val name: String,
+    val intervals: List<TimeInterval>,
+    var done: Boolean,
+    var notified: Boolean,
+    val estimate: Long
 ) : Comparable<Task> {
     val status: TaskStatus
         get() = when {
@@ -26,6 +27,9 @@ class Task (
 
     val late: Boolean
         get() = (elapsedTime.value ?: 0) > estimate
+
+    val shouldNotify: Boolean
+        get() = active && late && !notified
 
     val elapsedTime: MutableLiveData<Long> = MutableLiveData(calculateElapsedTime())
 

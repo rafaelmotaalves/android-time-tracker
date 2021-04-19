@@ -11,9 +11,9 @@ fun TaskWithTimeIntervalsModel.toTask() = Task(
             it.toTimeInterval()
         }.collect(Collectors.toList()),
         done = task.done,
-        estimate = task.estimateInSeconds
+        estimate = task.estimateInSeconds,
+        notified = task.notified
 )
-
 
 fun TimeIntervalModel.toTimeInterval() = TimeInterval(
         id = id,
@@ -35,5 +35,6 @@ fun Task.toTaskModel() = TaskModel(
         description = "",
         name = name,
         done = done,
+        notified = notified,
         estimateInSeconds = estimate
 )

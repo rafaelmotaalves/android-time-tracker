@@ -45,19 +45,28 @@ class NotificationService : Service() {
 
         coroutineScope.launch {
             repo.getActiveTasks().forEach { task ->
-                task.updateElapsedTime()
-
                 Log.d(this.javaClass.simpleName, "Checking task " + task.name)
-                // TODO: Add the logic for controlling notification repetition
-                if (task.late) {
-                    val notification = createNotification(task)
-                    val notificationManager = NotificationManagerCompat.from(applicationContext)
-                    notificationManager.notify(task.id, notification)
+                task.updateElapsedTime()
+                if (task.shouldNotify) {
+                    sendNotification(task)
+                    markAsNotified(task)
                 }
             }
         }
 
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private suspend fun markAsNotified(task: Task) {
+        task.notified = true
+
+        repo.updateTask(task)
+    }
+
+    private fun sendNotification(task: Task) {
+        val notification = createNotification(task)
+        val notificationManager = NotificationManagerCompat.from(applicationContext)
+        notificationManager.notify(task.id, notification)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
