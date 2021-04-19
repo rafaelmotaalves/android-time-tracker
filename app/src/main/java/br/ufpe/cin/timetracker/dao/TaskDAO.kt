@@ -13,6 +13,10 @@ interface TaskDAO {
     @Query("select * from tasks order by done ASC, name ASC")
     fun getTasksWithIntervals(): LiveData<List<TaskWithTimeIntervalsModel>>
 
+    @Transaction
+    @Query("select * from tasks where done = 0")
+    suspend fun getActiveTasks(): List<TaskWithTimeIntervalsModel>
+
     @Update
     suspend fun updateTimeInterval(timeIntervalModel: TimeIntervalModel)
 

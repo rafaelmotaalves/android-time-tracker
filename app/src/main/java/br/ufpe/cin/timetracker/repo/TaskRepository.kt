@@ -20,6 +20,9 @@ class TaskRepository (private val dao: TaskDAO)  {
         tasks.stream().map { it.toTask() }.filter{ it.done }.sorted().collect(Collectors.toList())
     }
 
+    suspend fun getActiveTasks() =
+        dao.getActiveTasks().stream().map { it.toTask() }.collect(Collectors.toList())
+
     suspend fun updateTimeInterval(timeInterval: TimeInterval) =
         dao.updateTimeInterval(timeInterval.toTimeIntervalModel())
 
