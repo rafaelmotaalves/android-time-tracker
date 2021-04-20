@@ -23,7 +23,7 @@ class TasksFragment (private val permissionsHelper: PermissionsHelper, private v
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTasksBinding.inflate(layoutInflater)
+        binding = FragmentTasksBinding.inflate(layoutInflater, container, false)
 
         val taskAdapter = TaskAdapter(permissionsHelper, viewModel, activity as Context, layoutInflater)
 

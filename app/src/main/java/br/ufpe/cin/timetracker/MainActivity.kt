@@ -1,19 +1,17 @@
 package br.ufpe.cin.timetracker
 
-import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import br.ufpe.cin.timetracker.databinding.ActivityMainBinding
 import br.ufpe.cin.timetracker.util.PermissionsHelper
@@ -22,7 +20,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: TaskViewModel by viewModels()
+    private val taskViewModel: TaskViewModel by viewModels()
+    private val statisticsViewModel: StatisticsViewModel by viewModels()
+
     private val permissionsHelper: PermissionsHelper = PermissionsHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,14 +38,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         val tabs = listOf<Fragment>(
-            TasksFragment.newInstance(permissionsHelper, viewModel, TasksMode.CURRENT),
-            TasksFragment.newInstance(permissionsHelper, viewModel, TasksMode.HISTORY)
+            TasksFragment.newInstance(permissionsHelper, taskViewModel, TasksMode.CURRENT),
+            TasksFragment.newInstance(permissionsHelper, taskViewModel, TasksMode.HISTORY),
+            StatisticsFragment.newInstance(permissionsHelper, statisticsViewModel)
         )
 
         val adapter = TabsAdapter(this, tabs)
         binding.viewpager.adapter = adapter
+        binding.viewpager.isUserInputEnabled = false
 
-        val tabNames = listOf("Tasks", "History")
+        val tabNames = listOf("Tasks", "History", "Statistics")
         TabLayoutMediator(binding.tabLayout, binding.viewpager) { tab, position ->
             tab.text = tabNames[position]
         }.attach()

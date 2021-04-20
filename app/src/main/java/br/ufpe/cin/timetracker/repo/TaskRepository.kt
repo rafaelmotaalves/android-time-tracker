@@ -17,6 +17,10 @@ class TaskRepository (private val dao: TaskDAO)  {
         tasks.stream().map { it.toTask() }.filter{ it.done }.sorted().collect(Collectors.toList())
     }
 
+    val historyTasksWithLocation = Transformations.map(historyTasks) {
+        tasks -> tasks.stream().filter { it.doneLocation != null }.collect(Collectors.toList())
+    }
+
     suspend fun getActiveTasks() =
         dao.getActiveTasks().stream().map { it.toTask() }.collect(Collectors.toList())
 

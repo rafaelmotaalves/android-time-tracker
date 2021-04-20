@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.location.Criteria
 import android.location.LocationManager
 import android.util.Log
 import android.view.MotionEvent
@@ -54,7 +55,10 @@ class TaskViewHolder(
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         if (permissionsHelper.hasPermissions() && locationManager.isLocationEnabled) {
-            val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val criteria = Criteria()
+            criteria.accuracy = Criteria.ACCURACY_FINE
+            val bestProvider = locationManager.getBestProvider(criteria, true)
+            val location = locationManager.getLastKnownLocation(bestProvider ?: LocationManager.GPS_PROVIDER)
             if (location != null) {
                 val doneLocation = Location(location.latitude, location.longitude)
 
@@ -66,7 +70,7 @@ class TaskViewHolder(
     }
 
     private fun alertDialog(task: Task): AlertDialog {
-        var optionsAlert: AlertDialog? = null
+        var optionsAlert: AlertDialog?
         if (task.done) {
             optionsAlert = AlertDialog.Builder(context)
                 .setItems(
