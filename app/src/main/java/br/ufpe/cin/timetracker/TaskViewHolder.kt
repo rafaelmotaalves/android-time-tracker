@@ -1,8 +1,10 @@
 package br.ufpe.cin.timetracker
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.location.LocationManager
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -10,10 +12,17 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import br.ufpe.cin.timetracker.databinding.TaskBinding
+import br.ufpe.cin.timetracker.entities.Location
 import br.ufpe.cin.timetracker.entities.Task
 import br.ufpe.cin.timetracker.entities.TaskStatus
+import br.ufpe.cin.timetracker.util.PermissionsHelper
+import java.security.Provider
 
-class TaskViewHolder(private val viewModel: TaskViewModel, private val context: Context, private val binding: TaskBinding) : RecyclerView.ViewHolder(binding.root) {
+class TaskViewHolder(
+    private val permissionsHelper: PermissionsHelper,
+    private val viewModel: TaskViewModel,
+    private val context: Context,
+    private val binding: TaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bindTo(task: Task) {
         binding.name.text = task.name
@@ -40,6 +49,22 @@ class TaskViewHolder(private val viewModel: TaskViewModel, private val context: 
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private fun concludeTask(task: Task) {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        if (permissionsHelper.hasPermissions() && locationManager.isLocationEnabled) {
+            val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            if (location != null) {
+                val doneLocation = Location(location.latitude, location.longitude)
+
+                return viewModel.concludeTask(task, doneLocation)
+            }
+        }
+
+        return viewModel.concludeTask(task)
+    }
+
     private fun alertDialog(task: Task): AlertDialog {
         var optionsAlert: AlertDialog? = null
         if (task.done) {
@@ -56,7 +81,7 @@ class TaskViewHolder(private val viewModel: TaskViewModel, private val context: 
             optionsAlert = AlertDialog.Builder(context)
                 .setItems(R.array.actions) { _, which ->
                     when (which) {
-                        0 -> viewModel.concludeTask(task)
+                        0 -> concludeTask(task)
                         1 -> viewModel.deleteTask(task)
                         else -> true
                     }

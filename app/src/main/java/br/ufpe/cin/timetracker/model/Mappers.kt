@@ -1,5 +1,6 @@
 package br.ufpe.cin.timetracker.model
 
+import br.ufpe.cin.timetracker.entities.Location
 import br.ufpe.cin.timetracker.entities.Task
 import br.ufpe.cin.timetracker.entities.TimeInterval
 import java.util.stream.Collectors
@@ -13,7 +14,11 @@ fun TaskWithTimeIntervalsModel.toTask() = Task(
         done = task.done,
         notified = task.notified,
         description = task.description,
-        estimate = task.estimateInSeconds
+        estimate = task.estimateInSeconds,
+        doneLocation =
+                if (task.doneLocation_lat != null && task.doneLocation_long != null)
+                Location(task.doneLocation_lat, task.doneLocation_long )
+                else null
 )
 
 fun TimeIntervalModel.toTimeInterval() = TimeInterval(
@@ -37,5 +42,7 @@ fun Task.toTaskModel() = TaskModel(
         name = name,
         done = done,
         notified = notified,
-        estimateInSeconds = estimate
+        estimateInSeconds = estimate,
+        doneLocation_lat = doneLocation?.lat,
+        doneLocation_long = doneLocation?.long
 )

@@ -9,13 +9,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.ufpe.cin.timetracker.databinding.FragmentTasksBinding
+import br.ufpe.cin.timetracker.util.PermissionsHelper
 
 enum class TasksMode {
     CURRENT, HISTORY
 }
 
-class TasksFragment (private val viewModel: TaskViewModel, private val mode: TasksMode): Fragment() {
+class TasksFragment (private val permissionsHelper: PermissionsHelper, private val viewModel: TaskViewModel, private val mode: TasksMode): Fragment() {
     private lateinit var binding: FragmentTasksBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,7 +25,7 @@ class TasksFragment (private val viewModel: TaskViewModel, private val mode: Tas
     ): View? {
         binding = FragmentTasksBinding.inflate(layoutInflater)
 
-        val taskAdapter = TaskAdapter(viewModel, activity as Context, layoutInflater)
+        val taskAdapter = TaskAdapter(permissionsHelper, viewModel, activity as Context, layoutInflater)
 
         binding.rvTasks.apply {
             layoutManager = LinearLayoutManager(activity!!.applicationContext)
@@ -56,6 +58,9 @@ class TasksFragment (private val viewModel: TaskViewModel, private val mode: Tas
 
     companion object {
         @JvmStatic
-        fun newInstance(viewModel: TaskViewModel, mode: TasksMode) = TasksFragment(viewModel, mode)
+        fun newInstance(
+            permissionsHelper: PermissionsHelper,
+            viewModel: TaskViewModel,
+            mode: TasksMode) = TasksFragment(permissionsHelper, viewModel, mode)
     }
 }

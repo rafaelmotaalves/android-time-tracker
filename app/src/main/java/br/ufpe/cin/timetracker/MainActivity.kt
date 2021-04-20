@@ -1,36 +1,45 @@
 package br.ufpe.cin.timetracker
 
+import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import br.ufpe.cin.timetracker.databinding.ActivityMainBinding
+import br.ufpe.cin.timetracker.util.PermissionsHelper
 import com.google.android.material.tabs.TabLayoutMediator
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TaskViewModel by viewModels()
+    private val permissionsHelper: PermissionsHelper = PermissionsHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         createNotificationChannel()
         scheduleNotificationService()
+        if (!permissionsHelper.hasPermissions()) {
+            permissionsHelper.requestPermissions()
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         val tabs = listOf<Fragment>(
-            TasksFragment.newInstance(viewModel, TasksMode.CURRENT),
-            TasksFragment.newInstance(viewModel, TasksMode.HISTORY)
+            TasksFragment.newInstance(permissionsHelper, viewModel, TasksMode.CURRENT),
+            TasksFragment.newInstance(permissionsHelper, viewModel, TasksMode.HISTORY)
         )
 
         val adapter = TabsAdapter(this, tabs)

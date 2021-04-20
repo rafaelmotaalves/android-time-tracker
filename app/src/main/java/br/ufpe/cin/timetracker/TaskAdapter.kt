@@ -8,12 +8,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import br.ufpe.cin.timetracker.databinding.TaskBinding
 import br.ufpe.cin.timetracker.entities.Task
+import br.ufpe.cin.timetracker.util.PermissionsHelper
 
-class TaskAdapter(private val viewModel: TaskViewModel, private val context: Context, private val inflater: LayoutInflater) : ListAdapter<Task, TaskViewHolder>(TaskDiffer) {
+class TaskAdapter(
+    private val permissionsHelper: PermissionsHelper,
+    private val viewModel: TaskViewModel,
+    private val context: Context,
+    private val inflater: LayoutInflater
+    ) : ListAdapter<Task, TaskViewHolder>(TaskDiffer) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val binding = TaskBinding.inflate(inflater)
 
-        return TaskViewHolder(viewModel, context, binding)
+        return TaskViewHolder(permissionsHelper, viewModel, context, binding)
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {

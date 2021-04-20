@@ -11,5 +11,7 @@ data class TaskModel(
     var description: String,
     var estimateInSeconds: Long,
     val notified: Boolean = false,
-    val done: Boolean = false
+    val done: Boolean = false,
+    val doneLocation_lat: Double? = null,
+    val doneLocation_long: Double? = null
 )

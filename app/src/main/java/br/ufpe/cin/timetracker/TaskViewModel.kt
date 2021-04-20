@@ -1,9 +1,11 @@
 package br.ufpe.cin.timetracker
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import br.ufpe.cin.timetracker.dao.TaskDB
+import br.ufpe.cin.timetracker.entities.Location
 import br.ufpe.cin.timetracker.entities.Task
 import br.ufpe.cin.timetracker.entities.TimeInterval
 import br.ufpe.cin.timetracker.repo.TaskRepository
@@ -45,9 +47,15 @@ class TaskViewModel(application: Application) :
         }
     }
 
+    fun concludeTask(task: Task, location: Location) {
+        task.doneLocation = location
+        concludeTask(task)
+    }
+
     fun concludeTask(task: Task) {
         if (!task.done) {
             stopTimer(task)
+
             task.done = true
             viewModelScope.launch {
                 repo.updateTask(task)

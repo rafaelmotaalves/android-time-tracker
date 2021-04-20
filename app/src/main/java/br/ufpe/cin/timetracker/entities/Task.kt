@@ -2,6 +2,11 @@ package br.ufpe.cin.timetracker.entities
 
 import androidx.lifecycle.MutableLiveData
 
+data class Location (
+    val lat: Double,
+    val long: Double)
+
+
 enum class TaskStatus {
     TODO, IN_PROGRESS, DONE, PAUSED
 }
@@ -13,7 +18,8 @@ class Task (
     var done: Boolean,
     var notified: Boolean,
     val estimate: Long,
-    val description: String
+    val description: String,
+    var doneLocation: Location?
 ) : Comparable<Task> {
     val status: TaskStatus
         get() = when {
