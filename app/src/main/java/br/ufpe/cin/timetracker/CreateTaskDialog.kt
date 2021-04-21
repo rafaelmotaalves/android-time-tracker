@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.TimePicker
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
@@ -23,6 +24,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
 import com.google.android.material.timepicker.TimeFormat
+import org.w3c.dom.Text
 
 
 class CreateTaskDialog(private val taskCreatorViewModel: TaskCreatorViewModel) : DialogFragment() {
@@ -44,25 +46,49 @@ class CreateTaskDialog(private val taskCreatorViewModel: TaskCreatorViewModel) :
         description = view.findViewById(R.id.taskDescField)
 
         val timePickerButton: Button = view.findViewById(R.id.timePickerButton)
+        val showTimeText: TextView = view.findViewById(R.id.showTimeText)
 
-        configureTimePicker(timePickerButton)
+        showTimeText.text = parseTimeText(
+            taskCreatorViewModel.getSelectedHour(),
+            taskCreatorViewModel.getSelectedMinute()
+        )
+
+        configureTimePicker(timePickerButton, showTimeText)
 
         return view
     }
 
-    private fun configureTimePicker(timePickerButton: Button) {
-        timePicker =
-            MaterialTimePicker.Builder()
-                .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setInputMode(INPUT_MODE_KEYBOARD)
-                .setHour(0)
-                .setMinute(1)
-                .setTitleText("Select estimated time")
-                .build()
-
+    private fun configureTimePicker(timePickerButton: Button, showTimeText: TextView) {
         timePickerButton.setOnClickListener {
+            timePicker =
+                MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setInputMode(INPUT_MODE_KEYBOARD)
+                    .setHour(taskCreatorViewModel.getSelectedHour())
+                    .setMinute(taskCreatorViewModel.getSelectedMinute())
+                    .setTitleText("Select estimated time")
+                    .build()
+
+            timePicker.addOnPositiveButtonClickListener {
+                taskCreatorViewModel.setSelectedHour(timePicker.hour)
+                taskCreatorViewModel.setSelectedMinute(timePicker.minute)
+                showTimeText.text = parseTimeText(timePicker.hour, timePicker.minute)
+            }
+
             timePicker.show(childFragmentManager, TAG_TIMER_PICKER)
         }
+    }
+
+    private fun parseTimeText(hour: Int, minute: Int) : String {
+        if (hour == 0) {
+            if (minute > 1) {
+                return "$minute minutes"
+            }
+
+            return "$minute minute"
+        }
+
+        return "$hour:$minute"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +99,12 @@ class CreateTaskDialog(private val taskCreatorViewModel: TaskCreatorViewModel) :
         toolbar.setOnMenuItemClickListener {
             val title = title.editText?.text.toString()
             val description = description.editText?.text.toString()
-            val input = TaskUserInput(title, description, timePicker.hour, timePicker.minute)
+            val input = TaskUserInput(
+                title,
+                description,
+                taskCreatorViewModel.getSelectedHour(),
+                taskCreatorViewModel.getSelectedMinute()
+            )
 
             taskCreatorViewModel.createTask(TaskModelMapper.fromUserInput(input))
 
