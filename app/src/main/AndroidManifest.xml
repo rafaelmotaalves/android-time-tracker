@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".NotificationService" android:enabled="true"/>
+        <service android:name=".services.NotificationService" android:enabled="true"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

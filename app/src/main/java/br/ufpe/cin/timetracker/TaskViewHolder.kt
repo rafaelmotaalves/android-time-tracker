@@ -3,12 +3,8 @@ package br.ufpe.cin.timetracker
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.location.Criteria
 import android.location.LocationManager
-import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
@@ -17,11 +13,11 @@ import br.ufpe.cin.timetracker.entities.Location
 import br.ufpe.cin.timetracker.entities.Task
 import br.ufpe.cin.timetracker.entities.TaskStatus
 import br.ufpe.cin.timetracker.util.PermissionsHelper
-import java.security.Provider
+import br.ufpe.cin.timetracker.viewmodels.TaskTimerViewModel
 
 class TaskViewHolder(
     private val permissionsHelper: PermissionsHelper,
-    private val viewModel: TaskViewModel,
+    private val taskTimerViewModel: TaskTimerViewModel,
     private val context: Context,
     private val binding: TaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -39,7 +35,7 @@ class TaskViewHolder(
         )
 
         binding.root.setOnClickListener {
-            viewModel.toggleTimer(task)
+            taskTimerViewModel.toggleTimer(task)
         }
 
         var optionsAlert: AlertDialog = alertDialog(task)
@@ -62,11 +58,11 @@ class TaskViewHolder(
             if (location != null) {
                 val doneLocation = Location(location.latitude, location.longitude)
 
-                return viewModel.concludeTask(task, doneLocation)
+                return taskTimerViewModel.concludeTask(task, doneLocation)
             }
         }
 
-        return viewModel.concludeTask(task)
+        return taskTimerViewModel.concludeTask(task)
     }
 
     private fun alertDialog(task: Task): AlertDialog {
@@ -77,7 +73,7 @@ class TaskViewHolder(
                     R.array.actions_without_done
                 ) { _, which ->
                     when (which) {
-                        0 -> viewModel.deleteTask(task)
+                        0 -> taskTimerViewModel.deleteTask(task)
                         else -> true
                     }
                 }.create()
@@ -86,7 +82,7 @@ class TaskViewHolder(
                 .setItems(R.array.actions) { _, which ->
                     when (which) {
                         0 -> concludeTask(task)
-                        1 -> viewModel.deleteTask(task)
+                        1 -> taskTimerViewModel.deleteTask(task)
                         else -> true
                     }
                 }.create()

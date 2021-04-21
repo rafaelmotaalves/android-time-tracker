@@ -8,19 +8,22 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import br.ufpe.cin.timetracker.adapters.TabsAdapter
 import br.ufpe.cin.timetracker.databinding.ActivityMainBinding
+import br.ufpe.cin.timetracker.fragments.StatisticsFragment
+import br.ufpe.cin.timetracker.services.NotificationService
 import br.ufpe.cin.timetracker.util.PermissionsHelper
+import br.ufpe.cin.timetracker.viewmodels.StatisticsViewModel
+import br.ufpe.cin.timetracker.viewmodels.TaskTimerViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val taskViewModel: TaskViewModel by viewModels()
+    private val taskTimerViewModel: TaskTimerViewModel by viewModels()
     private val statisticsViewModel: StatisticsViewModel by viewModels()
 
     private val permissionsHelper: PermissionsHelper = PermissionsHelper(this)
@@ -38,8 +41,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         val tabs = listOf<Fragment>(
-            TasksFragment.newInstance(permissionsHelper, taskViewModel, TasksMode.CURRENT),
-            TasksFragment.newInstance(permissionsHelper, taskViewModel, TasksMode.HISTORY),
+            TasksFragment.newInstance(permissionsHelper, taskTimerViewModel, TasksMode.CURRENT),
+            TasksFragment.newInstance(permissionsHelper, taskTimerViewModel, TasksMode.HISTORY),
             StatisticsFragment.newInstance(permissionsHelper, statisticsViewModel)
         )
 
@@ -53,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
         binding.floatingActionButton.setOnClickListener {
-            CreateTaskDialog.display(supportFragmentManager)
+            CreateTaskDialog.display(supportFragmentManager, application)
         }
     }
 
