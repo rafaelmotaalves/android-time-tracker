@@ -10,6 +10,7 @@
         <item name="colorSecondaryVariant">@color/purple_200</item>
         <item name="colorOnSecondary">@color/white</item>
 
+        <item name="backgroundColor" tools:targetApi="1">?attr/colorPrimary</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="android:textColor" tools:targetApi="1">?attr/colorSecondary</item>
         <item name="android:listDivider" tools:targetApi="1">@drawable/divider</item>
@@ -21,8 +22,9 @@
         <item name="colorPrimaryDark">#333333</item>
         <item name="colorAccent">@color/purple_200</item>
         <item name="colorPrimary">#333333</item>
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">#121212</item>
         <item name="actionMenuTextColor">@color/purple_200</item>
     </style>
 

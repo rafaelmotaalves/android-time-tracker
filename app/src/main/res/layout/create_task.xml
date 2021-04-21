@@ -30,6 +30,11 @@
             android:layout_height="wrap_content"
             android:hint="@string/task_title_placeholder"
             app:startIconDrawable="@drawable/ic_baseline_title_24"
+            android:background="?attr/colorPrimary"
+            app:boxBackgroundColor="?attr/colorPrimary"
+            app:hintTextColor="@color/grey"
+            android:textColorHint="@color/grey"
+            app:startIconTint="@color/grey"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -42,6 +47,10 @@
             android:id="@+id/taskDescField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:boxBackgroundColor="?attr/colorPrimary"
+            app:hintTextColor="@color/grey"
+            android:textColorHint="@color/grey"
+            app:startIconTint="@color/grey"
             app:startIconDrawable="@drawable/ic_baseline_description_24"
             android:hint="@string/task_description_placeholder">
 
@@ -50,30 +59,37 @@
                 android:layout_height="wrap_content"
                 />
         </com.google.android.material.textfield.TextInputLayout>
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:orientation="horizontal">
             <Button
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/timePickerButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select estimated time"
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
-                android:layout_marginEnd="220px"
-                app:icon="@drawable/ic_baseline_timer_24"
+                android:textColor="@color/white"
+                android:drawableLeft="@drawable/ic_baseline_timer_24"
+                android:drawableTint="@color/white"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 />
 
             <TextView
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/timePickerButton"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:id="@+id/showTimeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1 minute"
                 android:textColor="@color/grey"/>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
