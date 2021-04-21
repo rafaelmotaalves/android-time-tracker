@@ -81,14 +81,18 @@ class CreateTaskDialog(private val taskCreatorViewModel: TaskCreatorViewModel) :
 
     private fun parseTimeText(hour: Int, minute: Int) : String {
         if (hour == 0) {
-            if (minute > 1) {
+            if (minute != 1) {
                 return "$minute minutes"
             }
 
             return "$minute minute"
         }
 
-        return "$hour:$minute"
+        if (minute == 0) {
+            return "${hour}h 0${minute}min"
+        }
+
+        return "${hour}h ${minute}min"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
