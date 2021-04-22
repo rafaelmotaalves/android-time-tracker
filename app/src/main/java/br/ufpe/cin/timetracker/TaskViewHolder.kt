@@ -14,6 +14,7 @@ import br.ufpe.cin.timetracker.entities.Task
 import br.ufpe.cin.timetracker.entities.TaskStatus
 import br.ufpe.cin.timetracker.util.PermissionsHelper
 import br.ufpe.cin.timetracker.viewmodels.TaskTimerViewModel
+import com.google.android.gms.location.LocationServices
 
 class TaskViewHolder(
     private val permissionsHelper: PermissionsHelper,
@@ -48,21 +49,18 @@ class TaskViewHolder(
 
     @SuppressLint("MissingPermission")
     private fun concludeTask(task: Task) {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (permissionsHelper.hasPermissions()) {
+            LocationServices.getFusedLocationProviderClient(context)
+                .lastLocation.addOnSuccessListener {
+                    val doneLocation = Location(it.latitude, it.longitude)
 
-        if (permissionsHelper.hasPermissions() && locationManager.isLocationEnabled) {
-            val criteria = Criteria()
-            criteria.accuracy = Criteria.ACCURACY_FINE
-            val bestProvider = locationManager.getBestProvider(criteria, true)
-            val location = locationManager.getLastKnownLocation(bestProvider ?: LocationManager.GPS_PROVIDER)
-            if (location != null) {
-                val doneLocation = Location(location.latitude, location.longitude)
-
-                return taskTimerViewModel.concludeTask(task, doneLocation)
-            }
+                    taskTimerViewModel.concludeTask(task, doneLocation)
+                }.addOnFailureListener {
+                    taskTimerViewModel.concludeTask(task)
+                }
+        } else {
+            taskTimerViewModel.concludeTask(task)
         }
-
-        return taskTimerViewModel.concludeTask(task)
     }
 
     private fun alertDialog(task: Task): AlertDialog {
