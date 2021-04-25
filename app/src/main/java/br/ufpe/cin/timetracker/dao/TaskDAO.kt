@@ -18,7 +18,7 @@ interface TaskDAO {
     fun getTasksWithIntervals(done: Boolean): LiveData<List<TaskWithTimeIntervalsModel>>
 
     @Transaction
-    @Query("select * from tasks WHERE done = :done AND name like :nameLike or LOWER(name) like LOWER(:nameLike) order by done ASC, name ASC")
+    @Query("select * from tasks WHERE done = :done AND (name like :nameLike or LOWER(name) like LOWER(:nameLike)) order by done ASC, name ASC")
     fun getTasksWithIntervals(done: Boolean, nameLike: String): LiveData<List<TaskWithTimeIntervalsModel>>
 
     @Insert

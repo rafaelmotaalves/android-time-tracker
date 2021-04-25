@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val tabs = listOf<Fragment>(
+        val tabs = listOf(
             TasksFragment.newInstance(permissionsHelper, taskTimerViewModel, TasksMode.CURRENT),
             TasksFragment.newInstance(permissionsHelper, taskTimerViewModel, TasksMode.HISTORY),
             StatisticsFragment.newInstance(permissionsHelper, statisticsViewModel)
@@ -76,29 +76,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun configureTaskSearchBar(taskTimerViewModel: TaskTimerViewModel) {
         val searchView = binding.toolbar.menu.findItem(R.id.search).actionView as SearchView
-
         searchView.queryHint = "Search..."
-
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.search -> {
-                    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                        override fun onQueryTextSubmit(s: String): Boolean {
-                            taskTimerViewModel.searchTasks(s)
-                            return true
-                        }
-
-                        override fun onQueryTextChange(s: String): Boolean {
-                            taskTimerViewModel.searchTasks(s)
-                            return true
-                        }
-                    })
-
-                    true
-                }
-                else -> false
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String): Boolean {
+                taskTimerViewModel.searchTasks(s)
+                return true
             }
-        }
+
+            override fun onQueryTextChange(s: String): Boolean {
+                taskTimerViewModel.searchTasks(s)
+                return true
+            }
+        })
     }
 
     private fun scheduleNotificationService() {

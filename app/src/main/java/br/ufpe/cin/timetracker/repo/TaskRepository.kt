@@ -11,13 +11,15 @@ import java.util.stream.Collectors
 
 
 class TaskRepository(private val dao: TaskDAO)  {
-    var filterTextAll = MutableLiveData<String>()
+    var filterNameActiveTasks = MutableLiveData<String>()
+    var filterNameHistoryTasks = MutableLiveData<String>()
 
     init {
-        filterTextAll.value = ""
+        filterNameActiveTasks.value = ""
+        filterNameHistoryTasks.value = ""
     }
 
-    val activeTasks = Transformations.switchMap(filterTextAll) { input ->
+    val activeTasks = Transformations.switchMap(filterNameActiveTasks) { input ->
         if (input.isBlank()) {
             mapLiveDataToTaskDto(dao.getTasksWithIntervals(done=false))
         } else {
@@ -25,7 +27,7 @@ class TaskRepository(private val dao: TaskDAO)  {
         }
     }
 
-    val historyTasks = Transformations.switchMap(filterTextAll) { input ->
+    val historyTasks = Transformations.switchMap(filterNameHistoryTasks) { input ->
         if (input.isBlank()) {
             mapLiveDataToTaskDto(dao.getTasksWithIntervals(done=true))
         } else {
