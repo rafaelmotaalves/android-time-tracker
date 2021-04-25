@@ -69,8 +69,7 @@ class TaskTimerViewModel(application: Application) :
     }
 
     fun searchTasks(name: String) {
-        repo.filterNameActiveTasks.value = name
-        repo.filterNameHistoryTasks.value = name
+        repo.filterNameText.value = name
     }
 
     private fun startTimer(task: Task) {
