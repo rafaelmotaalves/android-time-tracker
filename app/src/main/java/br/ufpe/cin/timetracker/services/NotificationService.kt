@@ -11,7 +11,7 @@ import androidx.core.app.NotificationManagerCompat
 import br.ufpe.cin.timetracker.MainActivity
 import br.ufpe.cin.timetracker.R
 import br.ufpe.cin.timetracker.dao.TaskDB
-import br.ufpe.cin.timetracker.entities.Task
+import br.ufpe.cin.timetracker.dto.Task
 import br.ufpe.cin.timetracker.repo.TaskRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

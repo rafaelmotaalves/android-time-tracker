@@ -1,8 +1,8 @@
 package br.ufpe.cin.timetracker.model
 
-import br.ufpe.cin.timetracker.entities.Location
-import br.ufpe.cin.timetracker.entities.Task
-import br.ufpe.cin.timetracker.entities.TimeInterval
+import br.ufpe.cin.timetracker.dto.Location
+import br.ufpe.cin.timetracker.dto.Task
+import br.ufpe.cin.timetracker.dto.TimeInterval
 import java.util.stream.Collectors
 
 fun TaskWithTimeIntervalsModel.toTask() = Task(

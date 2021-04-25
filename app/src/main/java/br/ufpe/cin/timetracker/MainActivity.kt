@@ -1,15 +1,13 @@
 package br.ufpe.cin.timetracker
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import br.ufpe.cin.timetracker.adapters.TabsAdapter
 import br.ufpe.cin.timetracker.databinding.ActivityMainBinding
@@ -18,6 +16,7 @@ import br.ufpe.cin.timetracker.services.NotificationService
 import br.ufpe.cin.timetracker.util.PermissionsHelper
 import br.ufpe.cin.timetracker.viewmodels.StatisticsViewModel
 import br.ufpe.cin.timetracker.viewmodels.TaskTimerViewModel
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -39,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
         val tabs = listOf<Fragment>(
             TasksFragment.newInstance(permissionsHelper, taskTimerViewModel, TasksMode.CURRENT),
             TasksFragment.newInstance(permissionsHelper, taskTimerViewModel, TasksMode.HISTORY),
@@ -55,8 +53,51 @@ class MainActivity : AppCompatActivity() {
             tab.text = tabNames[position]
         }.attach()
 
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.text == "Statistics") {
+                    binding.toolbar.menu.findItem(R.id.search).isVisible = false
+                    return
+                }
+                binding.toolbar.menu.findItem(R.id.search).isVisible = true
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+
         binding.floatingActionButton.setOnClickListener {
             CreateTaskDialog.display(supportFragmentManager, application)
+        }
+
+        configureTaskSearchBar(taskTimerViewModel)
+    }
+
+    private fun configureTaskSearchBar(taskTimerViewModel: TaskTimerViewModel) {
+        val searchView = binding.toolbar.menu.findItem(R.id.search).actionView as SearchView
+
+        searchView.queryHint = "Search..."
+
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.search -> {
+                    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextSubmit(s: String): Boolean {
+                            taskTimerViewModel.searchTasks(s)
+                            return true
+                        }
+
+                        override fun onQueryTextChange(s: String): Boolean {
+                            taskTimerViewModel.searchTasks(s)
+                            return true
+                        }
+                    })
+
+                    true
+                }
+                else -> false
+            }
         }
     }
 
@@ -77,21 +118,19 @@ class MainActivity : AppCompatActivity() {
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Notification channel"
-            val descriptionText = "Notification channel description"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel =
-                NotificationChannel(NotificationService.CHANNEL_ID, name, importance).apply {
-                    description = descriptionText
-                }
+        val name = "Notification channel"
+        val descriptionText = "Notification channel description"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel =
+            NotificationChannel(NotificationService.CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
 
-            // Register the channel with the system
-            val notificationManager: NotificationManager =
-                getSystemService(
-                    Context.NOTIFICATION_SERVICE
-                ) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            getSystemService(
+                Context.NOTIFICATION_SERVICE
+            ) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }

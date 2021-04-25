@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import br.ufpe.cin.timetracker.TaskViewHolder
 import br.ufpe.cin.timetracker.viewmodels.TaskTimerViewModel
 import br.ufpe.cin.timetracker.databinding.TaskBinding
-import br.ufpe.cin.timetracker.entities.Task
+import br.ufpe.cin.timetracker.dto.Task
 import br.ufpe.cin.timetracker.util.PermissionsHelper
 
 class TaskAdapter(

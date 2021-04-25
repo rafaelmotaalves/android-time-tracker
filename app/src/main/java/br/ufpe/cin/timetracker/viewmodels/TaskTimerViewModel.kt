@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import br.ufpe.cin.timetracker.dao.TaskDB
-import br.ufpe.cin.timetracker.entities.Location
-import br.ufpe.cin.timetracker.entities.Task
-import br.ufpe.cin.timetracker.entities.TimeInterval
+import br.ufpe.cin.timetracker.dto.Location
+import br.ufpe.cin.timetracker.dto.Task
+import br.ufpe.cin.timetracker.dto.TimeInterval
 import br.ufpe.cin.timetracker.repo.TaskRepository
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -23,7 +23,7 @@ class TaskTimerViewModel(application: Application) :
     private val repo: TaskRepository = TaskRepository(TaskDB.getInstance(application.applicationContext).taskDAO())
     private var timerTask: TimerTask? = null
 
-    val tasks = repo.activeTasks
+    var tasks = repo.activeTasks
     val historyTasks = repo.historyTasks
 
     fun startBackgroundTimerUpdater() {
@@ -66,6 +66,10 @@ class TaskTimerViewModel(application: Application) :
         viewModelScope.launch {
             repo.deleteTask(task)
         }
+    }
+
+    fun searchTasks(name: String) {
+        repo.filterTextAll.value = name
     }
 
     private fun startTimer(task: Task) {

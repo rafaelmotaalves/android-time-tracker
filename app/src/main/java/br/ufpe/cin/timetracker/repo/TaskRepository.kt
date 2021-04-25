@@ -1,27 +1,49 @@
 package br.ufpe.cin.timetracker.repo
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import br.ufpe.cin.timetracker.dao.TaskDAO
-import br.ufpe.cin.timetracker.entities.Task
-import br.ufpe.cin.timetracker.entities.TimeInterval
+import br.ufpe.cin.timetracker.dto.Task
+import br.ufpe.cin.timetracker.dto.TimeInterval
 import br.ufpe.cin.timetracker.model.*
 import java.util.stream.Collectors
 
-class TaskRepository (private val dao: TaskDAO)  {
 
-    val activeTasks = Transformations.map(dao.getTasksWithIntervals()) { tasks ->
-        tasks.stream().map { it.toTask() }.filter{ !it.done }.sorted().collect(Collectors.toList())
+class TaskRepository(private val dao: TaskDAO)  {
+    var filterTextAll = MutableLiveData<String>()
+
+    init {
+        filterTextAll.value = ""
     }
 
-    val historyTasks = Transformations.map(dao.getTasksWithIntervals()) { tasks ->
-        tasks.stream().map { it.toTask() }.filter{ it.done }.sorted().collect(Collectors.toList())
+    val activeTasks = Transformations.switchMap(filterTextAll) { input ->
+        if (input.isBlank()) {
+            mapLiveDataToTaskDto(dao.getTasksWithIntervals(done=false))
+        } else {
+            mapLiveDataToTaskDto(dao.getTasksWithIntervals(done = false, nameLike="$input%"))
+        }
     }
 
-    val historyTasksWithLocation = Transformations.map(historyTasks) {
-        tasks -> tasks.stream().filter { it.doneLocation != null }.collect(Collectors.toList())
+    val historyTasks = Transformations.switchMap(filterTextAll) { input ->
+        if (input.isBlank()) {
+            mapLiveDataToTaskDto(dao.getTasksWithIntervals(done=true))
+        } else {
+            mapLiveDataToTaskDto(dao.getTasksWithIntervals(done=true, nameLike="$input%"))
+        }
     }
 
-    suspend fun getActiveTasks() =
+    val historyTasksWithLocation = Transformations.map(historyTasks) { tasks -> tasks.stream().filter { it.doneLocation != null }.collect(
+        Collectors.toList()
+    ) }
+
+    private fun mapLiveDataToTaskDto(data: LiveData<List<TaskWithTimeIntervalsModel>>): LiveData<MutableList<Task>> {
+        return Transformations.map(data) { tasks ->
+            tasks.stream().map { it.toTask() }.sorted().collect(Collectors.toList())
+        }
+    }
+
+    suspend fun getActiveTasks(): MutableList<Task> =
         dao.getActiveTasks().stream().map { it.toTask() }.collect(Collectors.toList())
 
     suspend fun updateTimeInterval(timeInterval: TimeInterval) =

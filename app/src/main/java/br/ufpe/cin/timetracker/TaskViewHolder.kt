@@ -3,15 +3,13 @@ package br.ufpe.cin.timetracker
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.location.Criteria
-import android.location.LocationManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import br.ufpe.cin.timetracker.databinding.TaskBinding
-import br.ufpe.cin.timetracker.entities.Location
-import br.ufpe.cin.timetracker.entities.Task
-import br.ufpe.cin.timetracker.entities.TaskStatus
+import br.ufpe.cin.timetracker.dto.Location
+import br.ufpe.cin.timetracker.dto.Task
+import br.ufpe.cin.timetracker.dto.TaskStatus
 import br.ufpe.cin.timetracker.util.PermissionsHelper
 import br.ufpe.cin.timetracker.viewmodels.TaskTimerViewModel
 import com.google.android.gms.location.LocationServices
@@ -26,7 +24,7 @@ class TaskViewHolder(
         binding.name.text = task.name
 
         task.elapsedTime.observe(context as LifecycleOwner,
-            Observer {
+            {
                 binding.timer.text = formatElapsedTimeString(it)
 
                 val status = getStatusString(task.status)
@@ -39,7 +37,7 @@ class TaskViewHolder(
             taskTimerViewModel.toggleTimer(task)
         }
 
-        var optionsAlert: AlertDialog = alertDialog(task)
+        val optionsAlert: AlertDialog = alertDialog(task)
 
         binding.root.setOnLongClickListener {
             optionsAlert.show()
@@ -64,7 +62,7 @@ class TaskViewHolder(
     }
 
     private fun alertDialog(task: Task): AlertDialog {
-        var optionsAlert: AlertDialog?
+        val optionsAlert: AlertDialog?
         if (task.done) {
             optionsAlert = AlertDialog.Builder(context)
                 .setItems(

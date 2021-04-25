@@ -13,6 +13,14 @@ interface TaskDAO {
     @Query("select * from tasks order by done ASC, name ASC")
     fun getTasksWithIntervals(): LiveData<List<TaskWithTimeIntervalsModel>>
 
+    @Transaction
+    @Query("select * from tasks WHERE done = :done order by done ASC, name ASC")
+    fun getTasksWithIntervals(done: Boolean): LiveData<List<TaskWithTimeIntervalsModel>>
+
+    @Transaction
+    @Query("select * from tasks WHERE done = :done AND name like :nameLike or LOWER(name) like LOWER(:nameLike) order by done ASC, name ASC")
+    fun getTasksWithIntervals(done: Boolean, nameLike: String): LiveData<List<TaskWithTimeIntervalsModel>>
+
     @Insert
     suspend fun insertTask(task: TaskModel)
 
