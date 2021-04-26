@@ -17,7 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             app:title="Temi"
             app:menu="@menu/main_menu"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            style="@style/Theme.TimeTracker.ActionBar"
             />
 
         <com.google.android.material.tabs.TabLayout
